@@ -1,6 +1,6 @@
 {
   "name": "refuseuse",
-  "version": "0.1.6",
+  "version": "1.1.6",
   "repository" : {
         "type" : "git",
         "url" : "https://github.com/panyifei/refuseuse.git"
