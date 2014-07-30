@@ -2,8 +2,11 @@
 即拒绝你调用可能从其他模块得到的某个function。
 运行需要
 npm install esprima
+
 npm install escope
+
 npm install refuseuse
+
 
 
 

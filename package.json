@@ -1,13 +1,17 @@
 {
   "name": "refuseuse",
-  "version": "0.0.6",
+  "version": "0.1.6",
+  "repository" : {
+        "type" : "git",
+        "url" : "https://github.com/panyifei/refuseuse.git"
+    },
   "description": "refuse to use the special string to be the global function name",
   "main": "refuseuse.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "refuse"
+    "refuseuse"
   ],
   "author": "panyifei",
   "license": "ISC"
