@@ -10,8 +10,8 @@
 使用前请先安装：
 
     npm install async
-    npm install async
-    npm install async
+    npm install esprima
+    npm install escope
     npm install async
 
 
