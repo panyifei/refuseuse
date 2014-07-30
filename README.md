@@ -26,23 +26,22 @@
 
 
 ## Collections
-<a name="forEach" />
-<a name="each" />
-### refuseFunction()
+<a name="refuseFunction" />
+### refuseFunction(path,specialString,callback)
+异步方法,禁止使用特殊字符的全局函数,传路径进来
 
-<a name="forEach" />
-<a name="each" />
-### refuseFunctionSync()
+<a name="refuseFunctionSync" />
+### refuseFunctionSync(path,specialString)
+同步方法,禁止使用特殊字符的全局函数,传路径进来
 
-<a name="forEach" />
-<a name="each" />
-### refuseFunctionString()
+<a name="refuseFunctionString" />
+### refuseFunctionString(codeString,specialString,callback)
+异步方法,禁止使用特殊字符的全局函数,传string进来
 
-<a name="forEach" />
-<a name="each" />
-### refuseFunctionStringSync()
+<a name="refuseFunctionStringSync" />
+### refuseFunctionStringSync(codeString,specialString)
+同步方法,禁止使用特殊字符的全局函数,传string进来
 
 //思路:写一个函数，从上到下检查scope
 里面如果声明了function，就过关，并且他的child scopes也过关，
 没有申明，看有没有使用，没有使用，自己直接过关，使用了的话，直接报错
-//还没有可以使用,还在编辑之中
