@@ -4,6 +4,7 @@
   var escope=require("escope");
   var async=require("async");
   var fs=require("fs");
+
   var refuseuse={};
 
 
@@ -103,7 +104,7 @@
                         }//如果名字一样，即在这层申明过了，则这层以及他的子层都算过关
                       }//如果是方法的申明
 
-                      if(scopeBlockBody[x]['type']&&(scopeBlockBody[x]['type']=='IfStatement'||scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement'||scopeBlockBody[x]['type']=='TryStatement')){
+                      if(scopeBlockBody[x]['type']&&(scopeBlockBody[x]['type']=='IfStatement'||scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement')){
                         if(scopeBlockBody[x]['type']=='IfStatement'){
                                   var funcBody=scopeBlockBody[x];
                                   var result=_checkIfElse(funcBody,specialString,i);
@@ -117,22 +118,10 @@
                                   }else if(result['type']=='continueOne'){
                                   }
                                   //减查if是否声明,包含了内部else
-                        }else if(scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement'||scopeBlockBody[x]['type']=='TryStatement'){
+                        }else if(scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement'){
                             if(scopeBlockBody[x]['body']){
                                 var funcBody=scopeBlockBody[x]['body']['body'];
                                 var result=_checkBodyDefine(funcBody,specialString,i);
-                                  if(result['type']=='finish'){
-                                    finish=true;
-                                    break;
-                                  }else if(result['type']=='continue'){
-                                    i+=scopes[i]['childScopes'].length;
-                                    continueCycle=true;
-                                    break;
-                                  }else if(result['type']=='continueOne'){
-                                  }
-                            }else if(scopeBlockBody[x]['block']){
-                               var funcBody=scopeBlockBody[x]['block']['body']; 
-                               var result=_checkBodyDefine(funcBody,specialString,i);
                                 if(result['type']=='finish'){
                                   finish=true;
                                   break;
@@ -143,7 +132,6 @@
                                 }else if(result['type']=='continueOne'){
                                 }
                             }
-                               
                         }
                       }//如果是在if块或者for块里声明的方法
 
@@ -187,7 +175,7 @@
                         }
                       }//加上对var右边调用的检测
 
-                      if(scopeBlockBody[x]['type']&&(scopeBlockBody[x]['type']=='IfStatement'||scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement'||scopeBlockBody[x]['type']=='TryStatement')){
+                      if(scopeBlockBody[x]['type']&&(scopeBlockBody[x]['type']=='IfStatement'||scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement')){
                           if(scopeBlockBody[x]['type']=='IfStatement'){
                                   if(scopeBlockBody[x]['consequent']['body']){
                                       var funcBody=scopeBlockBody[x]['consequent']['body'];
@@ -216,12 +204,9 @@
                                   };
 
 
-                          }else if(scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement'||scopeBlockBody[x]['type']=='TryStatement'){
+                          }else if(scopeBlockBody[x]['type']=='ForStatement'||scopeBlockBody[x]['type']=='DoWhileStatement'||scopeBlockBody[x]['type']=='WhileStatement'||scopeBlockBody[x]['type']=='ForInStatement'){
                              if(scopeBlockBody[x]['body']){
                               var funcBody=scopeBlockBody[x]['body']['body'];
-                              _checkBodyUse(funcBody,specialString,i);
-                             }else if(scopeBlockBody[x]['block']){
-                              var funcBody=scopeBlockBody[x]['block']['body'];
                               _checkBodyUse(funcBody,specialString,i);
                              }
                           }
@@ -252,11 +237,13 @@ var _checkBodyUse=function(funcBody,specialString,i){
                         }
                       }//加上对var右边调用的检测
 
-                      if(funcBody[j]['type']&&(funcBody[j]['type']=='IfStatement'||funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement'||funcBody[j]['type']=='TryStatement')){
+                      if(funcBody[j]['type']&&(funcBody[j]['type']=='IfStatement'||funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement')){
 
                         if(funcBody[j]['type']=='IfStatement'){
+                          console.log(funcBody[j]);
                             if(funcBody[j]['consequent']['body']){
                                 var funcIfBbody=funcBody[j]['consequent']['body'];
+                                 console.log(funcIfBbody);
                                 _checkBodyUse(funcIfBbody,specialString,i);
                             }//检查if的consequent
                             if (funcBody[j]['alternate']) {
@@ -279,13 +266,10 @@ var _checkBodyUse=function(funcBody,specialString,i){
                               cycle(tempBody);
                             };//检查consequent的alternate
 
-                        }else if(funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement'||funcBody[j]['type']=='TryStatement'){
+                        }else if(funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement'){
                             if(funcBody[j]['body']){
-                                var funcBody=funcBody[j]['body']['body'];
-                               _checkBodyUse(funcBody,specialString,i);
-                            }else if(funcBody[j]['block']){
-                               var funcBody=funcBody[j]['block']['body'];
-                               _checkBodyUse(funcBody,specialString,i);
+                            var funcBody=funcBody[j]['body']['body'];
+                            _checkBodyUse(funcBody,specialString,i);
                             }
                         }
                       }//检验if里面是否使用          
@@ -312,7 +296,7 @@ var _checkBodyUse=function(funcBody,specialString,i){
                       }//如果是方法的申明
 
 
-                      if(funcBody[j]['type']&&(funcBody[j]['type']=='IfStatement'||funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement'||funcBody[j]['type']=='TryStatement')){
+                      if(funcBody[j]['type']&&(funcBody[j]['type']=='IfStatement'||funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement')){
                         if(funcBody[j]['type']=='IfStatement'){
                             if(funcBody[j]['consequent']['body']){
                               var interFuncBody=funcBody[j]['consequent']['body'];
@@ -333,23 +317,15 @@ var _checkBodyUse=function(funcBody,specialString,i){
                                 //继续执行
                               }
                             }//如果有其他的else
-                        }else if(funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement'||funcBody[j]['type']=='TryStatement'){
-                             if(funcBody[j]['body']&&funcBody[j]['body']['body']){
-                                  var interFuncBody=funcBody[j]['body']['body'];
-                                  var result=_checkBodyDefine(interFuncBody,specialString,i);
-                                  if(result['type']=='finish'||result['type']=='continue'){
-                                    return result;
-                                  }else{
-                                    //继续执行
-                                  }
-                             }else if(funcBody[j]['block']&&funcBody[j]['block']['body']){
-                                  var interFuncBody=funcBody[j]['block']['body'];
-                                  var result=_checkBodyDefine(interFuncBody,specialString,i);
-                                  if(result['type']=='finish'||result['type']=='continue'){
-                                    return result;
-                                  }else{
-                                    //继续执行
-                                  }
+                        }else if(funcBody[j]['type']=='ForStatement'||funcBody[j]['type']=='DoWhileStatement'||funcBody[j]['type']=='WhileStatement'||funcBody[j]['type']=='ForInStatement'){
+                             if(funcBody[j]['body']['body']){
+                              var interFuncBody=funcBody[j]['body']['body'];
+                              var result=_checkBodyDefine(interFuncBody,specialString,i);
+                              if(result['type']=='finish'||result['type']=='continue'){
+                                return result;
+                              }else{
+                                //继续执行
+                              }
                              }
                         }
                         

@@ -59,11 +59,22 @@ describe('refuseuse',function(){
 
 
 //if (true) {};
-
 describe('refuseuse',function(){
   it("if",function(){
     assert.throws(function(){refuseuse.refuseFunction("./fixtures/if.js","_use")});
   });
+  it("ifelse",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/ifelse.js","_use")});
+  });
+  it("ifelseFinal",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/ifelseFinal.js","_use")});
+  });
+  it("ifelseifFinal",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/ifelseifFinal.js","_use")});
+  });
+  it("ifelseFuncIfelseOwn",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/ifelseFuncIfelseOwn.js","_use")});
+  });//多层的ifelse
   it("ifIf",function(){
     assert.throws(function(){refuseuse.refuseFunction("./fixtures/ifIf.js","_use")});
   });
@@ -84,6 +95,9 @@ describe('refuseuse',function(){
   });
   it("interFuncIfOwn  ",function(){
     assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/interFuncIfOwn.js","_use")});
+  });
+  it("if语句里面的if语句else里面调用",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/ifIfElse.js","_use")});
   });
 });
 
@@ -111,3 +125,50 @@ describe('refuseuse',function(){
 });
 
 
+//dowhile
+describe('refuseuse',function(){
+  it("dowhile",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/dowhile.js","_use")});
+  });
+  it("dowhileDowhile",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/dowhileDowhile.js","_use")});
+  });
+});
+
+//while
+describe('refuseuse',function(){
+  it("while",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/while.js","_use")});
+  });
+  it("whileWhile",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/whileWhile.js","_use")});
+  });
+});
+
+//forIn
+describe('refuseuse',function(){
+  it("forin",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/forin.js","_use")});
+  });
+  it("forinForin",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/forinForin.js","_use")});
+  });
+});
+
+
+
+describe('refuseuse',function(){
+  it("try",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/try.js","_use")});
+  });
+ it("tryTry",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/tryTry.js","_use")});
+  });
+});
+
+describe('refuseuse',function(){
+  it("rrr",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/rrr.js","_use")});
+  });
+
+});
