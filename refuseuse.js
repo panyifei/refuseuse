@@ -73,21 +73,37 @@
                       }//如果是方法的申明
 
 
-                      if(scopeBlockBody[x]['type']&&scopeBlockBody[x]['type']=='IfStatement'){
-                        if(scopeBlockBody[x]['consequent']['body']){
-                            var funcBody=scopeBlockBody[x]['consequent']['body'];
-                            var result=_checkIfBodyDefine(funcBody,specialString,i);
-                            if(result['type']=='finish'){
-                              finish=true;
-                              break;
-                            }else if(result['type']=='continue'){
-                              i+=scopes[i]['childScopes'].length;
-                              continueCycle=true;
-                              break;
-                            }else if(result['type']=='continueOne'){
+                      if(scopeBlockBody[x]['type']&&(scopeBlockBody[x]['type']=='IfStatement'||scopeBlockBody[x]['type']=='ForStatement')){
+                        if(scopeBlockBody[x]['type']=='IfStatement'){
+                            if(scopeBlockBody[x]['consequent']['body']){
+                                var funcBody=scopeBlockBody[x]['consequent']['body'];
+                                var result=_checkBodyDefine(funcBody,specialString,i);
+                                if(result['type']=='finish'){
+                                  finish=true;
+                                  break;
+                                }else if(result['type']=='continue'){
+                                  i+=scopes[i]['childScopes'].length;
+                                  continueCycle=true;
+                                  break;
+                                }else if(result['type']=='continueOne'){
+                                }
+                            }
+                        }else if(scopeBlockBody[x]['type']=='ForStatement'){
+                            if(scopeBlockBody[x]['body']){
+                                var funcBody=scopeBlockBody[x]['body']['body'];
+                                var result=_checkBodyDefine(funcBody,specialString,i);
+                                if(result['type']=='finish'){
+                                  finish=true;
+                                  break;
+                                }else if(result['type']=='continue'){
+                                  i+=scopes[i]['childScopes'].length;
+                                  continueCycle=true;
+                                  break;
+                                }else if(result['type']=='continueOne'){
+                                }
                             }
                         }
-                      }//如果是在if块里声明的方法
+                      }//如果是在if块或者for块里声明的方法
 
 
                       if(scopeBlockBody[x]['type']&&scopeBlockBody[x]['type']=='VariableDeclaration'){
@@ -98,16 +114,16 @@
                         }//用var申明了该方法,则默认该层可以调用,写在了前面就管不了了.
                       }//加上对var左边申明的检测
 
-                      if(scopeBlockBody[x]['type']&&scopeBlockBody[x]['type']=='ExpressionStatement'&&scopeBlockBody[x]['expression']['operator']=="="&&scopeBlockBody[x]['expression']['left']['name']){
-                         if(scopeBlockBody[x]['expression']['left']['name']==specialString&&scopeBlockBody[x]['expression']['right']['type']=="FunctionExpression"){
-                            if(i==0){
-                              finish=true;
-                              break;
-                            }else{
-                              throw new Error("you define a global function in the 局部函数 at line "+scopeBlockBody[x]['expression']['loc']['start']['line']);
-                            };
-                         }//用var申明了该方法,则默认该层可以调用,写在了前面就管不了了.
-                      }//加上对直接申明的检测,即没有用var,就是说会变成全局
+                      // if(scopeBlockBody[x]['type']&&scopeBlockBody[x]['type']=='ExpressionStatement'&&scopeBlockBody[x]['expression']['operator']=="="&&scopeBlockBody[x]['expression']['left']['name']){
+                      //    if(scopeBlockBody[x]['expression']['left']['name']==specialString&&scopeBlockBody[x]['expression']['right']['type']=="FunctionExpression"){
+                      //       if(i==0){
+                      //         finish=true;
+                      //         break;
+                      //       }else{
+                      //         throw new Error("you define a global function in the 局部函数 at line "+scopeBlockBody[x]['expression']['loc']['start']['line']);
+                      //       };
+                      //    }//用var申明了该方法,则默认该层可以调用,写在了前面就管不了了.
+                      // }//加上对直接申明的检测,即没有用var,就是说会变成全局
 
                   };//检查scope里面的方法申明
 
@@ -140,18 +156,20 @@
                         }
                       }//加上对var右边调用的检测
 
-                      if(scopeBlockBody[x]['type']&&scopeBlockBody[x]['type']=='IfStatement'){
-                        if(scopeBlockBody[x]['consequent']['body']){
-                            var funcBody=scopeBlockBody[x]['consequent']['body'];
-                            _checkBodyUse(funcBody,specialString,i);
-                        }
-                      }//检验if里面是否使用
-                      if(scopeBlockBody[x]['type']&&scopeBlockBody[x]['type']=='ForStatement'){
-                        if(scopeBlockBody[x]['body']){
-                            var funcBody=scopeBlockBody[x]['body']['body'];
-                            _checkBodyUse(funcBody,specialString,i);
-                        }
-                      }//检验for里面是否使用
+                      if(scopeBlockBody[x]['type']&&(scopeBlockBody[x]['type']=='IfStatement'||scopeBlockBody[x]['type']=='ForStatement')){
+                          if(scopeBlockBody[x]['type']=='IfStatement'){
+                            if(scopeBlockBody[x]['consequent']['body']){
+                                var funcBody=scopeBlockBody[x]['consequent']['body'];
+                                _checkBodyUse(funcBody,specialString,i);
+                            }
+                          }else if(scopeBlockBody[x]['type']=='ForStatement'){
+                             if(scopeBlockBody[x]['body']){
+                              var funcBody=scopeBlockBody[x]['body']['body'];
+                              _checkBodyUse(funcBody,specialString,i);
+                             }
+                          }
+                      }//检验if和for里面是否使用
+
 
                    };//检查scope里面的方法使用
                    return {'type':'continue',
@@ -191,10 +209,10 @@ var _checkBodyUse=function(funcBody,specialString,i){
                         }
                       }//检验if里面是否使用          
     }                        
-  }//判断if的body里面是否使用了
+  }//判断if或者for的body里面是否使用了
 
 
-  var _checkIfBodyDefine=function(funcBody,specialString,i){
+  var _checkBodyDefine=function(funcBody,specialString,i){
     for(var j=0;j<funcBody.length;j++){
                       if(funcBody[j]['type']&&funcBody[j]['type']=='FunctionDeclaration'){
                         if(funcBody[j]['id']['name']==specialString){
@@ -213,11 +231,19 @@ var _checkBodyUse=function(funcBody,specialString,i){
                       }//如果是方法的申明
 
 
-                      if(funcBody[j]['type']&&funcBody[j]['type']=='IfStatement'){
-                        if(funcBody[j]['consequent']['body']){
-                            var funcBody=funcBody[j]['consequent']['body'];
-                            return _checkIfBodyDefine(funcBody,specialString,i);
+                      if(funcBody[j]['type']&&(funcBody[j]['type']=='IfStatement'||funcBody[j]['type']=='ForStatement')){
+                        if(funcBody[j]['type']=='IfStatement'){
+                            if(funcBody[j]['consequent']['body']){
+                              var funcBody=funcBody[j]['consequent']['body'];
+                              return _checkBodyDefine(funcBody,specialString,i);
+                             }
+                        }else if(funcBody[j]['type']=='ForStatement'){
+                             if(funcBody[j]['body']['body']){
+                              var funcBody=funcBody[j]['body']['body'];
+                              return _checkBodyDefine(funcBody,specialString,i);
+                             }
                         }
+                        
                       }//如果是在if块里声明的方法
 
 
@@ -245,8 +271,7 @@ var _checkBodyUse=function(funcBody,specialString,i){
         throw err;
         //return ;
       }
-
-  };//传路径的话的异步方法
+  };
 
 
 

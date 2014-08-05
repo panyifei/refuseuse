@@ -70,6 +70,15 @@ describe('refuseuse',function(){
   it("ifFuncIfOwn ",function(){
     assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/ifFuncIfOwn.js","_use")});
   });
+  it("ifVarIfOwn ",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/ifVarIfOwn.js","_use")});
+  });
+  it("ifFuncForOwn ",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/ifFuncForOwn.js","_use")});
+  });
+  it("iferFuncForOwn ",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/iferFuncForOwn.js","_use")});
+  });
   it("globalFuncIfOwn  ",function(){
     assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/globalFuncIfOwn.js","_use")});
   });
@@ -86,6 +95,18 @@ describe('refuseuse',function(){
   });
   it("forFor",function(){
     assert.throws(function(){refuseuse.refuseFunction("./fixtures/forFor.js","_use")});
+  });
+  it("forFuncForOwn",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/forFuncForOwn.js","_use")});
+  });
+  it("forFuncIfOwn",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/forFuncIfOwn.js","_use")});
+  });
+  it("forerFuncIfOwn",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/forerFuncIfOwn.js","_use")});
+  });
+  it("forVarForOwn",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/forVarForOwn.js","_use")});
   });
 });
 
