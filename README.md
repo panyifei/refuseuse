@@ -9,10 +9,7 @@
 
 使用前请先安装：
 
-    npm install async
-    npm install esprima
-    npm install escope
-    npm install async
+    npm install refuseuse
 
 
 ## Documentation
@@ -20,28 +17,14 @@
 ### Collections
 
 * [`refuseFunction`](#refuseFunction)
-* [`refuseFunctionSync`](#refuseFunctionSync)
-* [`refuseFunctionString`](#refuseFunctionString)
-* [`refuseFunctionStringSync`](#refuseFunctionStringSync)
+
 
 
 ## Collections
 <a name="refuseFunction" />
 ### refuseFunction(path,specialString,callback)
-异步方法,禁止使用特殊字符的全局函数,传路径进来
+禁止使用特殊字符的全局函数,参数是传一个路径。
 
-<a name="refuseFunctionSync" />
-### refuseFunctionSync(path,specialString)
-同步方法,禁止使用特殊字符的全局函数,传路径进来
 
-<a name="refuseFunctionString" />
-### refuseFunctionString(codeString,specialString,callback)
-异步方法,禁止使用特殊字符的全局函数,传string进来
 
-<a name="refuseFunctionStringSync" />
-### refuseFunctionStringSync(codeString,specialString)
-同步方法,禁止使用特殊字符的全局函数,传string进来
 
-//思路:写一个函数，从上到下检查scope
-里面如果声明了function，就过关，并且他的child scopes也过关，
-没有申明，看有没有使用，没有使用，自己直接过关，使用了的话，直接报错
