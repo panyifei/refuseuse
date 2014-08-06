@@ -34,12 +34,13 @@
                 if(scopeBlockBody['consequent']&&scopeBlockBody['consequent']['body']){
                     var funcBody=scopeBlockBody['consequent']['body'];
                     var result=_checkBodyDefine(funcBody,specialString,i);
+
                     if(result['type']=='finish'||result['type']=='continue'){
                       return result;
                     }else if(result['type']=='continueOne'){
                     }
-                }
-                //console.log(scopeBlockBody['alternate']);
+                };
+                //if最外面一层的body处理
                 if((scopeBlockBody['alternate']!==null)&&scopeBlockBody['alternate']&&scopeBlockBody['alternate']['type']){
                     if(scopeBlockBody['alternate']['type']=="IfStatement"){
                       var funcBody=scopeBlockBody['alternate'];
@@ -180,8 +181,8 @@
                       }//假设现在只是直接调用的语句
 
                       if(scopeBlockBody[x]['type']&&scopeBlockBody[x]['type']=='VariableDeclaration'){
-                        if(scopeBlockBody[x]['declarations'][0]['init']['type']=='CallExpression'){
-                            if(scopeBlockBody[x]['declarations'][0]['init']['callee']['name']==specialString){
+                        if(scopeBlockBody[x]['declarations'][0]&&scopeBlockBody[x]['declarations'][0]['init']!=null&&scopeBlockBody[x]['declarations'][0]['init']['type']=='CallExpression'){
+                            if((scopeBlockBody[x]['declarations'][0]['init']['callee']!=null)&&scopeBlockBody[x]['declarations'][0]['init']['callee']['name']==specialString){
                                 throw new Error("sorry,you can't use:   "+specialString+"  at line "+scopeBlockBody[x]['declarations'][0]['init']['loc']['start']['line']);
                             }//调用了特定方法了,抛出Error
                         }
@@ -326,6 +327,15 @@ var _checkBodyUse=function(funcBody,specialString,i){
 
                              if(funcBody[j]['alternate']&&funcBody[j]['alternate']['consequent']&&funcBody[j]['alternate']['consequent']['body']){
                               var interFuncBody=funcBody[j]['alternate']['consequent']['body'];
+                              var result= _checkBodyDefine(interFuncBody,specialString,i);
+                              if(result['type']=='finish'||result['type']=='continue'){
+                                return result;
+                              }else{
+                                //继续执行
+                              }
+                            }//如果有其他的else
+                            if(funcBody[j]['alternate']&&funcBody[j]['alternate']['body']){
+                              var interFuncBody=funcBody[j]['alternate']['body'];
                               var result= _checkBodyDefine(interFuncBody,specialString,i);
                               if(result['type']=='finish'||result['type']=='continue'){
                                 return result;

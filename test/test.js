@@ -99,6 +99,12 @@ describe('refuseuse',function(){
   it("if语句里面的if语句else里面调用",function(){
     assert.throws(function(){refuseuse.refuseFunction("./fixtures/ifIfElse.js","_use")});
   });
+  it("if里面的if-else里的申明",function(){
+    assert.throws(function(){refuseuse.refuseFunction("./fixtures/ifTest1.js","_use")});
+  });
+  it("else的if里面的申明",function(){
+    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/ifTest2.js","_use")});
+  });
 });
 
 
@@ -166,9 +172,8 @@ describe('refuseuse',function(){
   });
 });
 
-describe('refuseuse',function(){
-  it("rrr",function(){
-    assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/rrr.js","_use")});
-  });
-
-});
+// describe('refuseuse',function(){
+//   it("rrr",function(){
+//     assert.doesNotThrow(function(){refuseuse.refuseFunction("./fixtures/rrr.js","_use")});
+//   });
+// });
