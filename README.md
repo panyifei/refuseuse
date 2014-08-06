@@ -22,7 +22,7 @@
 
 ## Collections
 <a name="refuseFunction" />
-### refuseFunction(path,specialString,callback)
+### refuseFunction(path,specialString)
 禁止使用特殊字符的全局函数,参数是传一个路径。
 
 
