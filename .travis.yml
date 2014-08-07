@@ -1,3 +1,7 @@
-language:node_js
+language: node_js
 node_js:
+<<<<<<< HEAD
    -0.10
+=======
+  - 0.11
+>>>>>>> 1bef117e527730ca3a497f7a455a5fa845aeec80
