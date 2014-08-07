@@ -19,5 +19,8 @@
     "escope": "^1.0.1",
     "esprima": "^1.2.2"
   },
+  "devDependencies": {
+    "mocha": "^1.20.1"
+  },
   "license": "ISC"
 }
