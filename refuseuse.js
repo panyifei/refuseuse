@@ -391,6 +391,14 @@ var _checkBodyUse=function(funcBody,specialString,i){
         //return ;
       }
   };
+  refuseuse.refuseFunctionByNode=function(code,task){
+      try{
+        _check(code,task);
+      }catch(err){
+        console.log(err);
+        throw err;
+      }
+  };
 
 
 
