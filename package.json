@@ -8,7 +8,7 @@
   "description": "refuse to use the special string to be the global function name",
   "main": "refuseuse.js",
   "scripts": {
-    "test": "mocha"
+    "test": "npm test"
   },
   "keywords": [
     "refuseuse"
