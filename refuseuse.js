@@ -384,7 +384,17 @@ var _checkBodyUse=function(funcBody,specialString,i){
   refuseuse.refuseFunction=function(path,task){
       try{
       var code=fs.readFileSync(path,"utf-8");
-        _check(code,task);
+        if(task instanceof Array){
+          for(var i=0;i<task.length;i++){
+            if(task[i]['type']=="Function"){
+              _check(code,task[i]['value']);
+            }
+          }
+        }else{
+          if(task['type']=="Function"){
+              _check(code,task['value']);
+            }
+        }
       }catch(err){
         console.log(err);
         throw err;
@@ -393,7 +403,17 @@ var _checkBodyUse=function(funcBody,specialString,i){
   };
   refuseuse.refuseFunctionByNode=function(code,task){
       try{
-        _check(code,task);
+        if(task instanceof Array){
+          for(var i=0;i<task.length;i++){
+            if(task[i]['type']=="Function"){
+              _check(code,task[i]['value']);
+            }
+          }
+        }else{
+          if(task['type']=="Function"){
+              _check(code,task['value']);
+            }
+        }
       }catch(err){
         console.log(err);
         throw err;
